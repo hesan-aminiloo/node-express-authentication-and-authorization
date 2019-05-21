@@ -10,16 +10,16 @@ const UserSchema = new Schema({
 
 UserSchema.pre('save', function(next){
     const user = this;
-    bcrypt.genSalt(10, function(err, salt){
-        if (!err){
-            bcrypt.hash(user.password, salt, function(err, newPassword){
-                if (!err){
-                    user.password = newPassword;
-                    next();
-                }
+    if (user.isModified('password') || user.isNew){
+        bcrypt.genSalt(10, function(err, salt){
+            if (err) return next(err);
+            bcrypt.hash(user.password, salt, function(err, hashedPassword){
+                if (err) return next(err);
+                user.password = hashedPassword;
+                next();
             });
-        }
-    });
+        });
+    } else { next() }
 });
 
 UserSchema.methods.comparePassword = function(password, cb){
