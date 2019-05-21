@@ -1,0 +1,8 @@
+{
+    "database" : {
+        "port" : "27017",
+        "name" : "profiles",
+        "ip"   : "127.0.0.1"
+    },
+    "secret" : "secretkey"
+}
